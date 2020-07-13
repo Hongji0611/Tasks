@@ -21,10 +21,15 @@ class PhotoList(ListView):
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super(PhotoList, self).get_context_data(**kwargs)
-        followers = FollowRelation.objects.get(
-            follower=user).followee.all()
+
+        try:
+            followers = FollowRelation.objects.get(
+                follower=user).followee.all()
+            context['followees'] = followers
+        except:
+            pass
+
         context['object'] = self.queryset
-        context['followees'] = followers
         return context
 
 
